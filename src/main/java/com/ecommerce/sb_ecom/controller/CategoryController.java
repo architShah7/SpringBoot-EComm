@@ -4,6 +4,7 @@ import com.ecommerce.sb_ecom.exceptions.ResourceNotFoundException;
 import com.ecommerce.sb_ecom.model.Category;
 
 //import com.ecommerce.sb_ecom.service.CategoryService;
+import com.ecommerce.sb_ecom.payload.CategoryResponse;
 import com.ecommerce.sb_ecom.service.CategoryServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ public class CategoryController {
     private final CategoryServiceImpl categoryServiceImpl;
 
     @GetMapping("/public/categories")
-    public ResponseEntity<List<Category>> getAllCategories(){
+    public ResponseEntity<CategoryResponse> getAllCategories(){
 
         return ResponseEntity.ok(categoryServiceImpl.getAllCategories());
     }

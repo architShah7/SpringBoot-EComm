@@ -2,33 +2,37 @@ package com.ecommerce.sb_ecom.service;
 
 import com.ecommerce.sb_ecom.exceptions.APIException;
 import com.ecommerce.sb_ecom.exceptions.ResourceNotFoundException;
+import com.ecommerce.sb_ecom.mapper.CategoryMapper;
 import com.ecommerce.sb_ecom.model.Category;
+import com.ecommerce.sb_ecom.payload.CategoryDTO;
+import com.ecommerce.sb_ecom.payload.CategoryResponse;
 import com.ecommerce.sb_ecom.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
-import javax.swing.text.html.Option;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements  CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final CategoryMapper categoryMapper;
 
     @Override
-    public List<Category> getAllCategories(){
+    public CategoryResponse getAllCategories(){
         List<Category> categories = categoryRepository.findAll();
         if (categories.isEmpty()){
             throw new APIException("No categories exist.");
         }
 
-        return categories;
+        List<CategoryDTO> categoryDTOS =  categories.stream()
+                .map(category -> categoryMapper.categoryToCategoryDTO(category)).toList();
+
+        CategoryResponse categoryResponse = new CategoryResponse();
+        categoryResponse.setContent(categoryDTOS);
+
+        return categoryResponse;
     }
 
     @Override
